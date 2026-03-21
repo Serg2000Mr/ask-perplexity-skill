@@ -87,15 +87,24 @@ cp cursor/perplexity.mdc .cursor/rules/perplexity.mdc
 
 ### Claude Code
 
-Добавьте ключ в `~/.claude/settings.json`:
+Добавьте ключ и разрешения в `~/.claude/settings.json`:
 
 ```json
 {
   "env": {
     "PERPLEXITY_API_KEY": "pplx-ваш-ключ-здесь"
+  },
+  "permissions": {
+    "allow": [
+      "Skill(ask-perplexity)",
+      "Bash(curl *)",
+      "Bash(python3 *)"
+    ]
   }
 }
 ```
+
+Без блока `permissions` Claude Code будет каждый раз спрашивать разрешение на выполнение команд.
 
 ### Cursor
 
