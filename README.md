@@ -1,4 +1,4 @@
-# ask-perplexity-skill
+# Навык ask-perplexity для вашей IDE
 
 Скилл для веб-поиска через [Perplexity AI](https://www.perplexity.ai/) прямо из чата с AI-агентом.
 
