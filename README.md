@@ -72,6 +72,8 @@ bash install.sh
 ```bash
 mkdir -p ~/.claude/skills/ask-perplexity
 cp claude-code/SKILL.md ~/.claude/skills/ask-perplexity/SKILL.md
+cp claude-code/run-perplexity.sh ~/.claude/skills/ask-perplexity/run-perplexity.sh
+chmod +x ~/.claude/skills/ask-perplexity/run-perplexity.sh
 ```
 
 ### Cursor

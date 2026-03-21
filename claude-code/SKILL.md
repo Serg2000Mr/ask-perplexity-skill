@@ -2,6 +2,8 @@
 name: ask-perplexity
 description: Ask Perplexity AI for web search. Use when you need current information, unfamiliar API details, third-party behavior, or external validation before making a decision.
 argument-hint: "<question>"
+allowed-tools:
+  - Bash(bash ~/.claude/skills/ask-perplexity/run-perplexity.sh *)
 ---
 
 # /ask-perplexity — Web Search via Perplexity AI
