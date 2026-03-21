@@ -17,10 +17,8 @@
 
 В чате с агентом:
 
-```
-
-```
 <img width="452" height="296" alt="image" src="https://github.com/user-attachments/assets/b650d073-20f5-4ddb-832c-a4404528ed5e" />
+
 Для вопроса необязательно писать команду /ask-perplexity вопрос.
 Скажите агенту "Спроси перплексити", и он сам использует навык.
 
