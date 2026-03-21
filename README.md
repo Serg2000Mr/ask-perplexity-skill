@@ -15,10 +15,11 @@
 
 ## Получение API-ключа
 
-В [perplexity.ai](https://www.perplexity.ai/) откройте **Аккаунт → API-платформа** и создайте ключ (начинается с `pplx-`)
+1. В [perplexity.ai](https://www.perplexity.ai/) откройте **Аккаунт → API-платформа**
 
   <img width="571" height="656" alt="image" src="https://github.com/user-attachments/assets/07bc8279-82e4-4562-ba1b-a2d1e0f68eb6" />
 
+2.  Cоздайте ключ API (начинается с `pplx-`) и скопируйте в буфер обмена
 
 ## Установка
 
