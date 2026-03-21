@@ -2,8 +2,6 @@
 name: ask-perplexity
 description: Ask Perplexity AI for web search. Use when you need current information, unfamiliar API details, third-party behavior, or external validation before making a decision.
 argument-hint: "<question>"
-allowed-tools:
-  - Bash(bash ~/.claude/skills/ask-perplexity/run-perplexity.sh *)
 ---
 
 # /ask-perplexity — Web Search via Perplexity AI
@@ -17,18 +15,30 @@ allowed-tools:
 ## Algorithm
 
 1. If no argument is provided, ask the user for the question.
-2. Run:
+2. Choose the model based on the task (see table below).
+3. Run:
 
 ```bash
-bash ~/.claude/skills/ask-perplexity/run-perplexity.sh "$ARGUMENTS"
+bash ~/.claude/skills/ask-perplexity/run-perplexity.sh "<question>" "<model>"
 ```
 
-3. Show the response to the user as-is.
-4. Preserve source links if they are present in the output.
+4. Show the response to the user as-is. Preserve source links if present.
 
-## When to use
+## Model selection
+
+Choose the model based on the nature of the request. Do not ask the user — decide yourself.
+
+| Model | When to use |
+|-------|-------------|
+| `sonar` | Quick fact, API clarification, short question (default) |
+| `sonar-pro` | Plan review, architectural decision, deep research |
+| `sonar-reasoning-pro` | Multi-step reasoning, complex analysis |
+| `sonar-deep-research` | Comprehensive synthesis from many sources |
+
+## When to use this skill
 
 - Unfamiliar APIs, libraries, formats
 - Third-party system behavior
 - Up-to-date information
 - External validation before planning or implementation
+- Plan or architecture review from an external perspective

@@ -2,6 +2,7 @@
 set -euo pipefail
 
 QUESTION="${1:-}"
+MODEL="${2:-sonar}"
 
 if [ -z "$QUESTION" ]; then
   echo "ERROR: question is required"
@@ -25,7 +26,7 @@ HTTP_CODE="$(curl -s -w '%{http_code}' -o "$TMPFILE" \
   https://api.perplexity.ai/chat/completions \
   -H "Authorization: Bearer $PERPLEXITY_API_KEY" \
   -H "Content-Type: application/json" \
-  -d "{\"model\":\"sonar\",\"messages\":[{\"role\":\"user\",\"content\":$ESCAPED}]}")"
+  -d "{\"model\":\"$MODEL\",\"messages\":[{\"role\":\"user\",\"content\":$ESCAPED}]}")"
 
 if [ "$HTTP_CODE" != "200" ]; then
   echo "ERROR: Perplexity API returned HTTP $HTTP_CODE"
