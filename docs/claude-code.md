@@ -1,12 +1,6 @@
 # Установка для Claude Code
 
-## Сначала нужно получить API-ключ
-
-1. В [perplexity.ai](https://www.perplexity.ai/) откройте **Аккаунт → API-платформа**
-
-   <img width="571" height="656" alt="Меню аккаунта Perplexity" src="https://github.com/user-attachments/assets/07bc8279-82e4-4562-ba1b-a2d1e0f68eb6" />
-
-2. Создайте ключ API (начинается с `pplx-`) и скопируйте в буфер обмена
+Если у вас ещё нет API-ключа — сначала [получите ключ и пополните баланс API](../README.md#получение-api-ключа-и-пополнение-баланса).
 
 ## Установка навыка
 
