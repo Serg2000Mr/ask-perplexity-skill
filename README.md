@@ -40,7 +40,6 @@
 
 API платный, оплата по факту потребления (за токены). Для работы нужно пополнить баланс на [API-платформе](https://www.perplexity.ai/settings/api).
 
-- При превышении rate limit API возвращает HTTP 429
 - Актуальные тарифы: [docs.perplexity.ai](https://docs.perplexity.ai/)
 
 ## Установка навыка
