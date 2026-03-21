@@ -35,7 +35,24 @@ if [ "$HTTP_CODE" != "200" ]; then
   exit 1
 fi
 
-python3 -c '
+if [ "$MODEL" = "sonar-deep-research" ]; then
+  OUTFILE="${TMPDIR:-${TEMP:-/tmp}}/pplx-deep-research-$(date +%Y%m%d-%H%M%S).md"
+  python3 -c '
+import json, sys
+data = json.load(sys.stdin)
+content = data["choices"][0]["message"]["content"]
+citations = data.get("citations", [])
+out = content
+if citations:
+    out += "\n\n---\n## Sources\n"
+    for i, url in enumerate(citations, 1):
+        out += f"{i}. {url}\n"
+sys.stdout.write(out)
+' < "$TMPFILE" > "$OUTFILE"
+  echo "sonar-deep-research: результат сохранён в файл (слишком большой для чата):"
+  echo "$OUTFILE"
+else
+  python3 -c '
 import json, sys
 data = json.load(sys.stdin)
 print(data["choices"][0]["message"]["content"])
@@ -46,3 +63,4 @@ if citations:
     for i, url in enumerate(citations, 1):
         print(f"{i}. {url}")
 ' < "$TMPFILE"
+fi
