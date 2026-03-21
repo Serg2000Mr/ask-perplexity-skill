@@ -20,7 +20,8 @@
 <img width="452" height="296" alt="image" src="https://github.com/user-attachments/assets/b650d073-20f5-4ddb-832c-a4404528ed5e" />
 
 можно и через:
-'''/ask-perplexity помоги решить проблему'''
+
+'/ask-perplexity помоги решить проблему'
 
 ## Получение API-ключа и пополнение баланса
 
