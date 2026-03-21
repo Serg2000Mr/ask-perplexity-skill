@@ -97,14 +97,13 @@ cp cursor/perplexity.mdc .cursor/rules/perplexity.mdc
   "permissions": {
     "allow": [
       "Skill(ask-perplexity)",
-      "Bash(curl *)",
-      "Bash(python3 *)"
+      "Bash(bash ~/.claude/skills/ask-perplexity/run-perplexity.sh *)"
     ]
   }
 }
 ```
 
-Блок `permissions` сокращает количество запросов на подтверждение. Если Claude Code всё равно спрашивает разрешение на отдельные команды — нажмите "Allow" и добавьте показанную команду в список `allow`.
+Навык вызывает один wrapper-скрипт. Разрешение на этот скрипт позволяет Claude Code выполнять запросы без дополнительных подтверждений.
 
 ### Cursor
 

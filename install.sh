@@ -6,21 +6,28 @@ set -euo pipefail
 
 SKILL_NAME="ask-perplexity"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-SOURCE="$SCRIPT_DIR/claude-code/SKILL.md"
-
-# Determine target directory
+SOURCE_DIR="$SCRIPT_DIR/claude-code"
 TARGET_DIR="$HOME/.claude/skills/$SKILL_NAME"
 
-if [ ! -f "$SOURCE" ]; then
-  echo "Error: SKILL.md not found at $SOURCE"
+if [ ! -f "$SOURCE_DIR/SKILL.md" ]; then
+  echo "Error: SKILL.md not found at $SOURCE_DIR/SKILL.md"
   echo "Run this script from the repository root."
   exit 1
 fi
 
-mkdir -p "$TARGET_DIR"
-cp "$SOURCE" "$TARGET_DIR/SKILL.md"
+if [ ! -f "$SOURCE_DIR/run-perplexity.sh" ]; then
+  echo "Error: run-perplexity.sh not found at $SOURCE_DIR/run-perplexity.sh"
+  exit 1
+fi
 
-echo "Installed: $TARGET_DIR/SKILL.md"
+mkdir -p "$TARGET_DIR"
+cp "$SOURCE_DIR/SKILL.md" "$TARGET_DIR/SKILL.md"
+cp "$SOURCE_DIR/run-perplexity.sh" "$TARGET_DIR/run-perplexity.sh"
+chmod +x "$TARGET_DIR/run-perplexity.sh"
+
+echo "Installed:"
+echo "  $TARGET_DIR/SKILL.md"
+echo "  $TARGET_DIR/run-perplexity.sh"
 echo ""
 echo "Next steps:"
 echo "  1. Set your API key in ~/.claude/settings.json:"
