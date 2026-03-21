@@ -15,9 +15,11 @@
 
 ## Использование
 
-Пример: просто попросите агента "спросить у Perplexity", без запоминания команд.
+Пример: просто попросите агента "спросить у Perplexity"
 
 <img width="452" height="296" alt="image" src="https://github.com/user-attachments/assets/b650d073-20f5-4ddb-832c-a4404528ed5e" />
+
+можно и через /ask-perplexity помоги решить проблему
 
 ## Стоимость и лимиты API
 
