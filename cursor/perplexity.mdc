@@ -19,10 +19,24 @@ if [ -z "$PERPLEXITY_API_KEY" ]; then
 fi
 ```
 
-Then run the search, replacing `<question>` with the actual query:
+Then choose the model based on the task and run the search.
+
+## Model selection
+
+Choose the model based on the nature of the request. Do not ask the user — decide yourself.
+
+| Model | When to use |
+|-------|-------------|
+| `sonar` | Quick fact, API clarification, short question (default) |
+| `sonar-pro` | Plan review, architectural decision, deep research |
+| `sonar-reasoning-pro` | Multi-step reasoning, complex analysis |
+| `sonar-deep-research` | Comprehensive synthesis from many sources |
+
+Replace `<question>` with the actual query and `<model>` with the chosen model ID:
 
 ```bash
 QUESTION="<question>"
+MODEL="<model>"
 
 TMPFILE=$(mktemp "${TMPDIR:-${TEMP:-/tmp}}/pplx_XXXXXX.json")
 trap "rm -f '$TMPFILE'" EXIT
@@ -33,7 +47,7 @@ HTTP_CODE=$(curl -s -w '%{http_code}' -o "$TMPFILE" \
   https://api.perplexity.ai/chat/completions \
   -H "Authorization: Bearer $PERPLEXITY_API_KEY" \
   -H "Content-Type: application/json" \
-  -d "{\"model\":\"sonar\",\"messages\":[{\"role\":\"user\",\"content\":$ESCAPED}]}")
+  -d "{\"model\":\"$MODEL\",\"messages\":[{\"role\":\"user\",\"content\":$ESCAPED}]}")
 
 if [ "$HTTP_CODE" -ne 200 ]; then
   echo "ERROR: Perplexity API returned HTTP $HTTP_CODE"
