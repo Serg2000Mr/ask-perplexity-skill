@@ -21,9 +21,22 @@ allowed-tools:
 If no argument is provided — ask the user.
 Perplexity understands most languages; keep the question as-is.
 
-### 2. Send the request
+### 2. Check API key
 
-Escape the question for JSON using python3, then call the Perplexity API:
+```bash
+if [ -z "$PERPLEXITY_API_KEY" ]; then
+  echo "ERROR: PERPLEXITY_API_KEY is not set."
+  echo "Set it in ~/.claude/settings.json: {\"env\":{\"PERPLEXITY_API_KEY\":\"pplx-...\"}}"
+  exit 1
+fi
+```
+
+If the key is not set — stop and show the message above. Do NOT proceed with curl.
+
+### 3. Send the request
+
+Escape the question for JSON using python3, then call the Perplexity API.
+Use `-w '%{http_code}'` to capture the HTTP status separately:
 
 ```bash
 QUESTION="<question>"
@@ -33,24 +46,47 @@ trap "rm -f '$TMPFILE'" EXIT
 
 ESCAPED=$(python3 -c "import json,sys; print(json.dumps(sys.stdin.read().strip()))" <<< "$QUESTION")
 
-curl -s https://api.perplexity.ai/chat/completions \
+HTTP_CODE=$(curl -s -w '%{http_code}' -o "$TMPFILE" \
+  https://api.perplexity.ai/chat/completions \
   -H "Authorization: Bearer $PERPLEXITY_API_KEY" \
   -H "Content-Type: application/json" \
-  -d "{\"model\":\"sonar\",\"messages\":[{\"role\":\"user\",\"content\":$ESCAPED}]}" \
-  -o "$TMPFILE" && \
-  python3 -c "import json,sys; print(json.load(sys.stdin)['choices'][0]['message']['content'])" < "$TMPFILE"
+  -d "{\"model\":\"sonar\",\"messages\":[{\"role\":\"user\",\"content\":$ESCAPED}]}")
 ```
 
-### 3. Show the response
+### 4. Handle errors
 
-Display the response text to the user. If the response contains links — preserve them.
+Check HTTP status before parsing:
 
-### 4. Error handling
+```bash
+if [ "$HTTP_CODE" -ne 200 ]; then
+  echo "ERROR: Perplexity API returned HTTP $HTTP_CODE"
+  cat "$TMPFILE"
+  exit 1
+fi
+```
 
-- If `$PERPLEXITY_API_KEY` is not set — tell the user to set it (see README for instructions).
-- If curl returns an error — read `$TMPFILE` and show the error message.
+- HTTP 401 — invalid or missing API key.
 - HTTP 429 — rate limit exceeded, suggest waiting 60 seconds.
-- HTTP 401 — invalid API key.
+- Other errors — show the raw response body.
+
+### 5. Show the response with citations
+
+Parse the response and append citations if present:
+
+```bash
+python3 -c "
+import json, sys
+data = json.load(sys.stdin)
+print(data['choices'][0]['message']['content'])
+citations = data.get('citations', [])
+if citations:
+    print('\n---\nSources:')
+    for i, url in enumerate(citations, 1):
+        print(f'{i}. {url}')
+" < "$TMPFILE"
+```
+
+Display the full output to the user — both the answer text and the source links.
 
 ## When to use
 

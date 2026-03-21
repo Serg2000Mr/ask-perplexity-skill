@@ -78,7 +78,10 @@ cp claude-code/SKILL.md ~/.claude/skills/ask-perplexity/SKILL.md
 
 Скопируйте файл правила в ваш проект:
 
-.cursor/rules/perplexity.mdc
+```bash
+mkdir -p .cursor/rules
+cp cursor/perplexity.mdc .cursor/rules/perplexity.mdc
+```
 
 ## Настройка API-ключа
 

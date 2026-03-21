@@ -10,7 +10,16 @@ When you need to search the web for current information, use the Perplexity AI A
 
 ## How to search
 
-Run the following shell command, replacing `<question>` with the actual query:
+First check that the API key is available. If not — stop and tell the user:
+
+```bash
+if [ -z "$PERPLEXITY_API_KEY" ]; then
+  echo "ERROR: PERPLEXITY_API_KEY is not set. Add 'export PERPLEXITY_API_KEY=pplx-...' to ~/.bashrc or ~/.zshrc"
+  exit 1
+fi
+```
+
+Then run the search, replacing `<question>` with the actual query:
 
 ```bash
 QUESTION="<question>"
@@ -20,24 +29,34 @@ trap "rm -f '$TMPFILE'" EXIT
 
 ESCAPED=$(python3 -c "import json,sys; print(json.dumps(sys.stdin.read().strip()))" <<< "$QUESTION")
 
-curl -s https://api.perplexity.ai/chat/completions \
+HTTP_CODE=$(curl -s -w '%{http_code}' -o "$TMPFILE" \
+  https://api.perplexity.ai/chat/completions \
   -H "Authorization: Bearer $PERPLEXITY_API_KEY" \
   -H "Content-Type: application/json" \
-  -d "{\"model\":\"sonar\",\"messages\":[{\"role\":\"user\",\"content\":$ESCAPED}]}" \
-  -o "$TMPFILE" && \
-  python3 -c "import json,sys; print(json.load(sys.stdin)['choices'][0]['message']['content'])" < "$TMPFILE"
+  -d "{\"model\":\"sonar\",\"messages\":[{\"role\":\"user\",\"content\":$ESCAPED}]}")
+
+if [ "$HTTP_CODE" -ne 200 ]; then
+  echo "ERROR: Perplexity API returned HTTP $HTTP_CODE"
+  cat "$TMPFILE"
+  exit 1
+fi
+
+python3 -c "
+import json, sys
+data = json.load(sys.stdin)
+print(data['choices'][0]['message']['content'])
+citations = data.get('citations', [])
+if citations:
+    print('\n---\nSources:')
+    for i, url in enumerate(citations, 1):
+        print(f'{i}. {url}')
+" < "$TMPFILE"
 ```
 
 ## Requirements
 
 - `PERPLEXITY_API_KEY` environment variable must be set in your shell profile (`~/.bashrc`, `~/.zshrc`)
 - `python3` and `curl` must be available
-
-## Error handling
-
-- If `$PERPLEXITY_API_KEY` is empty — tell the user to set it
-- HTTP 429 — rate limit, wait 60 seconds
-- HTTP 401 — invalid API key
 
 ## When to use
 
