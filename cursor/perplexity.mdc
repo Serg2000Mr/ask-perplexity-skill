@@ -1,0 +1,47 @@
+---
+description: Search the web via Perplexity AI when asked or when you need current information
+globs: []
+alwaysApply: false
+---
+
+# Perplexity AI Web Search
+
+When you need to search the web for current information, use the Perplexity AI API.
+
+## How to search
+
+Run the following shell command, replacing `<question>` with the actual query:
+
+```bash
+QUESTION="<question>"
+
+TMPFILE=$(mktemp "${TMPDIR:-${TEMP:-/tmp}}/pplx_XXXXXX.json")
+trap "rm -f '$TMPFILE'" EXIT
+
+ESCAPED=$(python3 -c "import json,sys; print(json.dumps(sys.stdin.read().strip()))" <<< "$QUESTION")
+
+curl -s https://api.perplexity.ai/chat/completions \
+  -H "Authorization: Bearer $PERPLEXITY_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d "{\"model\":\"sonar\",\"messages\":[{\"role\":\"user\",\"content\":$ESCAPED}]}" \
+  -o "$TMPFILE" && \
+  python3 -c "import json,sys; print(json.load(sys.stdin)['choices'][0]['message']['content'])" < "$TMPFILE"
+```
+
+## Requirements
+
+- `PERPLEXITY_API_KEY` environment variable must be set in your shell profile (`~/.bashrc`, `~/.zshrc`)
+- `python3` and `curl` must be available
+
+## Error handling
+
+- If `$PERPLEXITY_API_KEY` is empty — tell the user to set it
+- HTTP 429 — rate limit, wait 60 seconds
+- HTTP 401 — invalid API key
+
+## When to use
+
+- Unfamiliar APIs, libraries, or formats
+- Current events or recently released features
+- Platform-specific behavior or edge cases
+- Resolving uncertainty before making a decision
