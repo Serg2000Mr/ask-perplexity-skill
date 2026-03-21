@@ -95,7 +95,7 @@ echo ".env" >> .gitignore
 
 - `python3` (для экранирования JSON и парсинга ответа)
 - `curl` (для HTTP-запросов)
-- Оба обычно предустановлены на macOS/Linux. На Windows используйте Git Bash.
+- 
 
 ## Модели Perplexity API (март 2026)
 
