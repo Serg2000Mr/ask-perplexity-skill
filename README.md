@@ -1,6 +1,6 @@
 # Скилл ask-perplexity для вашей IDE
 
-Скилл для веб-поиска через [Perplexity AI](https://www.perplexity.ai/) прямо из чата с AI-агентом.
+Скилл для веб-поиска и глубокого исследования через [Perplexity AI](https://www.perplexity.ai/) прямо из чата с AI-агентом.
 
 Поддерживает **Claude Code** (VSCode extension, CLI) и **Cursor**.
 
