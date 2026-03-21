@@ -36,7 +36,7 @@ Choose the model based on the nature of the request. Do not ask the user — dec
 | Model | When to use |
 |-------|-------------|
 | `sonar` | Quick fact, API clarification, short question (default) |
-| `sonar-pro` | Plan review, architectural decision, deep research |
+| `sonar-pro` | Plan review, architectural decision, research question |
 | `sonar-reasoning-pro` | Multi-step reasoning, complex analysis |
 | `sonar-deep-research` | Comprehensive synthesis from many sources |
 
