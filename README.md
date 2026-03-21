@@ -42,6 +42,19 @@ API платный, оплата по факту потребления (за т
 
 - Актуальные тарифы: [docs.perplexity.ai](https://docs.perplexity.ai/)
 
+## Модели Perplexity API (март 2026)
+
+| Model ID | Описание |
+|----------|----------|
+| `sonar` | Быстрый веб-поиск, Q&A, суммаризация (128k контекст). Используется по умолчанию |
+| `sonar-pro` | Глубокий поиск с расширенным контекстом (200k) |
+| `sonar-reasoning-pro` | Многошаговое рассуждение, chain-of-thought (128k) |
+| `sonar-deep-research` | Глубокий синтез из сотен источников (128k) |
+
+Чтобы сменить модель, отредактируйте `"model":"sonar"` в SKILL.md / perplexity.mdc.
+
+Список моделей может измениться. Актуальный перечень: [docs.perplexity.ai](https://docs.perplexity.ai/).
+
 ## Установка навыка
 
 ### Claude Code (автоматически)
@@ -98,19 +111,6 @@ export PERPLEXITY_API_KEY="pplx-ваш-ключ-здесь"
 ```bash
 echo ".env" >> .gitignore
 ```
-
-## Модели Perplexity API (март 2026)
-
-| Model ID | Описание |
-|----------|----------|
-| `sonar` | Быстрый веб-поиск, Q&A, суммаризация (128k контекст). Используется по умолчанию |
-| `sonar-pro` | Глубокий поиск с расширенным контекстом (200k) |
-| `sonar-reasoning-pro` | Многошаговое рассуждение, chain-of-thought (128k) |
-| `sonar-deep-research` | Глубокий синтез из сотен источников (128k) |
-
-Чтобы сменить модель, отредактируйте `"model":"sonar"` в SKILL.md / perplexity.mdc.
-
-Список моделей может измениться. Актуальный перечень: [docs.perplexity.ai](https://docs.perplexity.ai/).
 
 ## Требования
 
