@@ -15,8 +15,10 @@
 
 ## Получение API-ключа
 
-1. Зарегистрируйтесь на [perplexity.ai](https://www.perplexity.ai/)
-2. Перейдите в [Settings → API](https://www.perplexity.ai/settings/api)
+1. В [perplexity.ai](https://www.perplexity.ai/) перейдите в личный кабинет
+   <img width="237" height="657" alt="image" src="https://github.com/user-attachments/assets/3a87b11c-9b82-441d-bdc9-178332c7eebd" />
+2. Api-платформа
+   <img width="256" height="531" alt="image" src="https://github.com/user-attachments/assets/ee93a9ab-e921-43af-8244-be9817ca7891" />
 3. Создайте API-ключ (начинается с `pplx-`)
 
 ## Установка
@@ -42,10 +44,7 @@ cp claude-code/SKILL.md ~/.claude/skills/ask-perplexity/SKILL.md
 
 Скопируйте файл правила в ваш проект:
 
-```bash
-mkdir -p .cursor/rules
-cp cursor/perplexity.mdc .cursor/rules/perplexity.mdc
-```
+.cursor/rules/perplexity.mdc
 
 ## Настройка API-ключа
 
@@ -84,9 +83,8 @@ echo ".env" >> .gitignore
 В чате с агентом:
 
 ```
-/ask-perplexity как работает WebSocket handshake?
-/ask-perplexity what are the rate limits for GitHub API?
-/ask-perplexity формат frontmatter для Cursor .mdc файлов
+/ask-perplexity проведи ревью плана
+/ask-perplexity у меня не получается <суть проблемы> 
 ```
 
 ## Требования
