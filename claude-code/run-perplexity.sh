@@ -6,7 +6,8 @@ MODEL="${2:-sonar}"
 
 if [ -z "$QUESTION" ]; then
   echo "ERROR: question is required"
-  echo "Usage: /ask-perplexity <question>"
+  echo "Usage: /ask-perplexity <question> [model]"
+  echo "Models: sonar (default), sonar-pro, sonar-reasoning-pro, sonar-deep-research"
   exit 1
 fi
 

@@ -51,7 +51,9 @@ API платный, оплата по факту потребления (за т
 | `sonar-reasoning-pro` | Многошаговое рассуждение, chain-of-thought (128k) |
 | `sonar-deep-research` | Глубокий синтез из сотен источников (128k) |
 
-Чтобы сменить модель, отредактируйте `"model":"sonar"` в SKILL.md / perplexity.mdc.
+**Claude Code**: агент выбирает модель автоматически по контексту задачи (логика описана в SKILL.md).
+
+**Cursor**: модель фиксирована как `sonar`. Чтобы сменить — отредактируйте `"model":"sonar"` в `cursor/perplexity.mdc`.
 
 Список моделей может измениться. Актуальный перечень: [docs.perplexity.ai](https://docs.perplexity.ai/).
 
