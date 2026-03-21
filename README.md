@@ -104,7 +104,7 @@ cp cursor/perplexity.mdc .cursor/rules/perplexity.mdc
 }
 ```
 
-Без блока `permissions` Claude Code будет каждый раз спрашивать разрешение на выполнение команд.
+Блок `permissions` сокращает количество запросов на подтверждение. Если Claude Code всё равно спрашивает разрешение на отдельные команды — нажмите "Allow" и добавьте показанную команду в список `allow`.
 
 ### Cursor
 
