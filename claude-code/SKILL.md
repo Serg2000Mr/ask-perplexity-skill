@@ -1,6 +1,6 @@
 ---
 name: ask-perplexity
-description: Ask Perplexity AI for web search. Use when you need current information, unfamiliar API details, third-party behavior, or external validation before making a decision.
+description: Ask Perplexity AI to get a consolidated, sourced answer from across the web. Use when you need synthesized information from many sources — not just a web search, but an analyzed answer with citations.
 argument-hint: "<question>"
 ---
 
@@ -37,8 +37,10 @@ Choose the model based on the nature of the request. Do not ask the user — dec
 
 ## When to use this skill
 
+Use when you need a consolidated, analyzed answer from many web sources — not just a search result.
+
 - Unfamiliar APIs, libraries, formats
-- Third-party system behavior
-- Up-to-date information
+- Third-party system behavior or platform quirks
+- Up-to-date information not in training data
 - External validation before planning or implementation
 - Plan or architecture review from an external perspective
