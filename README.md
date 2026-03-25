@@ -2,7 +2,7 @@
 
 Скилл для получения консолидированных ответов из множества веб-источников через [Perplexity AI](https://www.perplexity.ai/) прямо из чата с AI-агентом.
 
-Поддерживает **Claude Code** (VSCode extension, CLI) и **Cursor**.
+Поддерживает **Claude Code** (VSCode extension, CLI) и **Cursor**. Для других IDE запрашивайте адаптацию у агента.
 
 ## Что это
 
