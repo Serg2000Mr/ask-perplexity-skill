@@ -23,7 +23,10 @@ trap 'rm -f "$TMPFILE"' EXIT
 
 ESCAPED="$(python3 -c 'import json,sys; print(json.dumps(sys.stdin.read().strip()))' <<< "$QUESTION")"
 
-HTTP_CODE="$(curl -s -w '%{http_code}' -o "$TMPFILE" \
+# --ssl-no-revoke works around schannel CRYPT_E_NO_REVOCATION_CHECK on Windows
+# Git Bash when the local OCSP/CRL responder is unreachable. Harmless on Linux/macOS
+# because those builds use a different TLS backend.
+HTTP_CODE="$(curl -s --ssl-no-revoke -w '%{http_code}' -o "$TMPFILE" \
   https://api.perplexity.ai/chat/completions \
   -H "Authorization: Bearer $PERPLEXITY_API_KEY" \
   -H "Content-Type: application/json" \

@@ -43,7 +43,9 @@ trap "rm -f '$TMPFILE'" EXIT
 
 ESCAPED=$(python3 -c "import json,sys; print(json.dumps(sys.stdin.read().strip()))" <<< "$QUESTION")
 
-HTTP_CODE=$(curl -s -w '%{http_code}' -o "$TMPFILE" \
+# --ssl-no-revoke works around schannel CRYPT_E_NO_REVOCATION_CHECK on Windows
+# Git Bash when the OCSP/CRL responder is unreachable. Harmless on Linux/macOS.
+HTTP_CODE=$(curl -s --ssl-no-revoke -w '%{http_code}' -o "$TMPFILE" \
   https://api.perplexity.ai/chat/completions \
   -H "Authorization: Bearer $PERPLEXITY_API_KEY" \
   -H "Content-Type: application/json" \
@@ -97,3 +99,23 @@ fi
 - Current events or recently released features
 - Platform-specific behavior or edge cases
 - Resolving uncertainty before making a decision
+
+## Hallucinations — fact-check every factual claim
+
+Perplexity composes its answer from retrieved sources plus an LLM, and it regularly hallucinates. Typical failure modes:
+
+- Invented CVE numbers, paper titles, product names, version tags
+- Misattributed quotes — a real statement tied to the wrong source
+- Patched vulnerabilities presented as current
+- Misstated APIs, flags, exit codes
+- Two real facts stitched into a false whole
+
+**Required discipline**:
+
+1. Treat every factual claim as a hypothesis, not as ground truth, especially when it would change your plan, your code, or an architectural decision.
+2. Verify any named entity before acting: CVE IDs against the NVD or the original advisory, product names on vendor sites, APIs against official docs, version tags in the actual changelog.
+3. Prefer primary sources from the `Sources:` block over Perplexity's paraphrase. If Perplexity cites a doc, open that doc and re-read the section.
+4. Do not copy assertions into code, plans, or reports without independent confirmation.
+5. If a critical claim cannot be independently verified, mark it as unverified when relaying to the user, or drop it.
+
+The skill is valuable as an external synthesizer and pointer to sources. Its summaries are not evidence.
