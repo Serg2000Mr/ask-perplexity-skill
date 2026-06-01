@@ -2,6 +2,13 @@
 
 Пользовательские изменения скилла. Полная история — в `git log`.
 
+## 2026-06-02
+
+### Long prompt fix
+- `run-perplexity.sh` — добавлены режимы `--file <prompt.md>` и `--stdin`, JSON request body теперь пишется во временный файл и отправляется через `curl -d @file`. Это убирает ограничение длины командной строки Windows для длинных ревью и больших планов.
+- `run-perplexity.sh`, `perplexity.mdc` — транспортный сбой `curl` теперь возвращает явное `ERROR: Perplexity transport failed`.
+- `SKILL.md`, `perplexity.mdc`, `README.md` — документирован файловый путь для длинных multiline prompts.
+
 ## 2026-04-22
 
 ### Дисциплина фактчекинга

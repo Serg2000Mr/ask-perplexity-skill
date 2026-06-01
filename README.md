@@ -114,5 +114,7 @@ Perplexity имеет два отдельных баланса: для веб-с
 | HTTP 429 | Превышен лимит запросов, подождите 60 секунд |
 | `python3: command not found` | Установите Python 3 |
 | Пустой ответ | Проверьте интернет-соединение |
+| `Argument list too long` / «Имя файла или его расширение имеет слишком большую длину» | Для длинных prompt используйте файловый режим: `run-perplexity.sh --file /path/to/prompt.md sonar-pro`. Скрипт отправляет JSON через `curl -d @file`, поэтому тело запроса не попадает в командную строку |
+| `ERROR: Perplexity transport failed` | `curl` не смог выполнить HTTP-запрос: проверьте интернет, прокси, TLS и доступность `https://api.perplexity.ai` |
 | `curl: (35)` / `HTTP 000` на Windows | schannel не может проверить CRL/OCSP. В скрипте уже есть `--ssl-no-revoke`. Если проблема всё равно есть — обновите curl или проверьте корпоративный MITM-proxy |
 

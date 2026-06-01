@@ -22,6 +22,18 @@ argument-hint: "<question>"
 bash ~/.claude/skills/ask-perplexity/run-perplexity.sh "<question>" "<model>"
 ```
 
+   For long multiline prompts, write the prompt to a UTF-8 temporary file and run:
+
+```bash
+bash ~/.claude/skills/ask-perplexity/run-perplexity.sh --file "/path/to/prompt.md" "<model>"
+```
+
+   The script also supports stdin:
+
+```bash
+cat "/path/to/prompt.md" | bash ~/.claude/skills/ask-perplexity/run-perplexity.sh --stdin "<model>"
+```
+
 4. Show the response to the user as-is. Preserve source links if present.
 
    **Exception for `sonar-deep-research`**: the script saves the full response to a file (to avoid flooding the chat) and prints only the file path. After running:
