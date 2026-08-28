@@ -16,8 +16,7 @@ bash install.sh
 
 ```bash
 mkdir -p ~/.claude/skills/ask-perplexity
-cp claude-code/SKILL.md ~/.claude/skills/ask-perplexity/SKILL.md
-cp claude-code/run-perplexity.sh ~/.claude/skills/ask-perplexity/run-perplexity.sh
+cp -R claude-code/. ~/.claude/skills/ask-perplexity/
 chmod +x ~/.claude/skills/ask-perplexity/run-perplexity.sh
 ```
 
@@ -39,7 +38,9 @@ chmod +x ~/.claude/skills/ask-perplexity/run-perplexity.sh
 }
 ```
 
-Навык вызывает один wrapper-скрипт. Разрешение на этот скрипт позволяет Claude Code выполнять запросы без дополнительных подтверждений.
+На Windows навык вызывает `run-perplexity.ps1`, которому передаётся только путь
+к `request.json`. Вопрос и разрешённые материалы лежат в отдельных файлах, а
+исполняемые скрипты при обычном запросе не меняются.
 
 ## Требования
 

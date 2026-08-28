@@ -1,0 +1,6 @@
+{
+  "model": "sonar-pro",
+  "questionFile": "question.example.md",
+  "contextFiles": [],
+  "outputFile": "answer.md"
+}

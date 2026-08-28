@@ -2,7 +2,7 @@
 
 Скилл для получения консолидированных ответов из множества веб-источников через [Perplexity AI](https://www.perplexity.ai/) прямо из чата с AI-агентом.
 
-Поддерживает **Claude Code** (VSCode extension, CLI) и **Cursor**. Для других IDE запрашивайте адаптацию у агента.
+Поддерживает **Claude Code**, **Codex** и **Cursor**.
 
 ## Что это
 
@@ -19,9 +19,14 @@
 
 <img width="452" height="296" alt="image" src="https://github.com/user-attachments/assets/b650d073-20f5-4ddb-832c-a4404528ed5e" />
 
-можно и через:
+Можно и через:
 
 '/ask-perplexity помоги решить проблему'
+
+Вопрос и дополнительные материалы хранятся отдельно от исполняемых скриптов.
+Агент создаёт временные `question.md` и `request.json`, проверяет манифест и
+запускает неизменяемый `run-perplexity.ps1`. Поэтому многострочный вопрос,
+кавычки и фрагменты исходников не приходится экранировать внутри команды.
 
 ## ⚠️ Галлюцинации — проверяйте каждое фактическое утверждение
 
@@ -93,16 +98,17 @@ Perplexity имеет два отдельных баланса: для веб-с
 
 ## Что будет установлено
 
-**Claude Code:**
-- `~/.claude/skills/ask-perplexity/SKILL.md`
-- `~/.claude/skills/ask-perplexity/run-perplexity.sh`
+Для каждого выбранного агента устанавливается один и тот же комплект:
 
-**Cursor:**
-- правило `cursor/perplexity.mdc`, которое нужно скопировать в `.cursor/rules/` вашего проекта
+- `SKILL.md`;
+- `run-perplexity.ps1` — безопасный вход через `request.json` в Windows;
+- `run-perplexity.sh` — транспорт к Perplexity API;
+- `assets/request.example.json` и `assets/question.example.md` — шаблоны данных.
 
 ## Установка
 
 - [Инструкция для Claude Code](docs/claude-code.md)
+- [Инструкция для Codex](docs/codex.md)
 - [Инструкция для Cursor](docs/cursor.md)
 
 ## Troubleshooting

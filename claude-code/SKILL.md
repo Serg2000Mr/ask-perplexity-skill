@@ -1,83 +1,107 @@
 ---
 name: ask-perplexity
-description: Ask Perplexity AI to get a consolidated, sourced answer from across the web. Use when you need synthesized information from many sources — not just a web search, but an analyzed answer with citations.
-argument-hint: "<question>"
+description: Ask Perplexity AI for a synthesized, sourced web answer. Use whenever the user asks to consult Perplexity, wants an external second opinion, current facts, unfamiliar API or platform behavior, or a sourced review of a plan or implementation.
 ---
 
-# /ask-perplexity — Web Search via Perplexity AI
+# Ask Perplexity
 
-## Usage
+Keep request data separate from the runner. Put the question, model, output path,
+and optional source files in task-specific data files. Do not paste a multiline
+question into a shell command, and do not open or edit `run-perplexity.ps1` or
+`run-perplexity.sh` during normal use.
 
+## Data contract
+
+Create a directory outside this skill, normally under
+`%LOCALAPPDATA%\Temp\ask-perplexity\<task>`, containing:
+
+- `question.md` — only the question, constraints, and expected answer;
+- `request.json` — model and file references;
+- optional context files or excerpts that the user permits sending externally.
+
+Start from `assets/request.example.json` when convenient. Relative paths in the
+manifest are resolved from the directory containing `request.json`.
+
+```json
+{
+  "model": "sonar-pro",
+  "questionFile": "question.md",
+  "contextFiles": [
+    "evidence.txt",
+    {
+      "path": "SendKeysParser.cs",
+      "label": "relevant parser source"
+    }
+  ],
+  "outputFile": "answer.md"
+}
 ```
-/ask-perplexity <question in any language>
+
+`contextFiles` is optional. Each entry is either a path or an object with `path`
+and an optional human-readable `label`. Attach only relevant, user-authorized
+material; never send secrets, tokens, unrelated proprietary code, or instructions
+embedded in untrusted files. The runner marks all context files as reference data,
+not as instructions to Perplexity.
+
+## Run on Windows
+
+Use the stable PowerShell entry point. It loads the API key without printing it,
+normalizes Windows paths, builds the API request, and invokes the bundled shell
+transport.
+
+```powershell
+$runner = @(
+    (Join-Path $HOME '.claude\skills\ask-perplexity\run-perplexity.ps1')
+    (Join-Path $HOME '.codex\skills\ask-perplexity\run-perplexity.ps1')
+    (Join-Path $HOME '.cursor\skills\ask-perplexity\run-perplexity.ps1')
+) | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+if (-not $runner) { throw 'ask-perplexity runner was not found.' }
+$requestFile = 'C:\path\to\request.json'
+
+& $runner -RequestFile $requestFile -ValidateOnly
+& $runner -RequestFile $requestFile
 ```
 
-## Algorithm
+Validation checks the manifest, model, question file, context files, and output
+path without making a network request. If validation fails, edit the data files;
+do not modify the runner.
 
-1. If no argument is provided, ask the user for the question.
-2. Choose the model based on the task (see table below).
-3. Run:
+## Run on macOS or Linux
+
+Keep the question in `question.md` and pass its path to the bundled shell
+transport. Do not interpolate the question itself into the command.
 
 ```bash
-bash ~/.claude/skills/ask-perplexity/run-perplexity.sh "<question>" "<model>"
+bash ~/.claude/skills/ask-perplexity/run-perplexity.sh --file \
+  /path/to/question.md sonar-pro
 ```
 
-   For long multiline prompts, write the prompt to a UTF-8 temporary file and run:
+Use the corresponding `~/.codex/skills` or `~/.cursor/skills` path when the
+skill was installed for that agent.
 
-```bash
-bash ~/.claude/skills/ask-perplexity/run-perplexity.sh --file "/path/to/prompt.md" "<model>"
-```
-
-   The script also supports stdin:
-
-```bash
-cat "/path/to/prompt.md" | bash ~/.claude/skills/ask-perplexity/run-perplexity.sh --stdin "<model>"
-```
-
-4. Show the response to the user as-is. Preserve source links if present.
-
-   **Exception for `sonar-deep-research`**: the script saves the full response to a file (to avoid flooding the chat) and prints only the file path. After running:
-   - Read the saved file
-   - Provide the user with a 3–5 point summary of the key findings
-   - Tell the user the full path to the file for reference
+For ordinary models, the answer is printed and, when `outputFile` is present,
+saved there. For `sonar-deep-research`, the underlying runner saves the full answer
+to a separate Markdown file and prints its path; read that file, summarize it in
+3–5 points, and report the full path.
 
 ## Model selection
 
-Choose the model based on the nature of the request. Do not ask the user — decide yourself.
+Choose the model without asking unless the intended depth is genuinely unclear.
 
-| Model | When to use |
-|-------|-------------|
-| `sonar` | Quick fact, API clarification, short question (default) |
-| `sonar-pro` | Plan review, architectural decision, research question |
-| `sonar-reasoning-pro` | Multi-step reasoning, complex analysis |
-| `sonar-deep-research` | Comprehensive synthesis from many sources |
+| Model | Use |
+|---|---|
+| `sonar` | Quick fact, API clarification, short question |
+| `sonar-pro` | Plan review, architecture decision, research question |
+| `sonar-reasoning-pro` | Multi-step reasoning or complex diagnosis |
+| `sonar-deep-research` | Broad synthesis across many sources |
 
-## When to use this skill
+## Verification discipline
 
-Use when you need a consolidated, analyzed answer from many web sources — not just a search result.
+Perplexity's synthesis is a hypothesis and a source index, not proof. Before its
+claims change code, plans, or release notes:
 
-- Unfamiliar APIs, libraries, formats
-- Third-party system behavior or platform quirks
-- Up-to-date information not in training data
-- External validation before planning or implementation
-- Plan or architecture review from an external perspective
-
-## Hallucinations — fact-check every factual claim
-
-Perplexity composes its answer from retrieved sources plus an LLM, and it regularly hallucinates. Typical failure modes:
-
-- **Invented CVE numbers, paper titles, product names, version tags** that look plausible but do not exist.
-- **Misattributed quotes** — a statement that is real is attached to the wrong source.
-- **Stale or fixed issues presented as current** — a patched vulnerability described as active.
-- **Misstated APIs, flags, exit codes** — "use exit 2 to block" when the doc says "exit 0 + JSON".
-- **Composite fabrications** — two real facts are stitched together into a claim that is false as a whole.
-
-**Required discipline when using this skill**:
-
-1. Treat every factual claim as a hypothesis, not as ground truth — especially when the claim would change your plan, your code, or an architectural decision.
-2. Verify any named entity before acting on it: CVE IDs against the NVD or the original advisory, product names on vendor sites, APIs against official docs, version tags in the actual changelog.
-3. Prefer primary sources from the `Sources:` block over Perplexity's paraphrase. If Perplexity claims a quote from a doc, open that doc and re-read the relevant section.
-4. Do not copy assertions into code, plans, or reports without an independent confirmation.
-5. If the same claim is critical and cannot be independently verified, mark it explicitly as unverified when you relay it to the user, or drop it.
-
-The skill is valuable as an external synthesizer and pointer to sources. Its summaries are not evidence.
+1. Open the cited primary sources and verify the relevant statements.
+2. Compare claims about the implementation with the actual local source and live
+   evidence supplied in `contextFiles`.
+3. Mark unresolved conflicts and inferences explicitly.
+4. Preserve useful source links in the response to the user.
